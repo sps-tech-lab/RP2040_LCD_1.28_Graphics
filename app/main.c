@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include "pico/stdlib.h"
+#include "platform.h"
 
 int main() {
-    stdio_init_all();
-    printf("Hello, world!\n");
+    platform_init();
+    printf("Hello, LCD!\n");
     return 0;
 }
