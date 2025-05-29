@@ -12,15 +12,23 @@ project(RP2040_LCD_1.28_Graphics)
 # Initialize the Raspberry Pi Pico SDK
 pico_sdk_init()
 
+# Collect all font sources
+file(GLOB FONT_SOURCES
+        ${CMAKE_SOURCE_DIR}/src/fonts/*.cpp
+)
+
 # Add executables
 add_executable(main
         app/main.c
         src/platform/platform.c
+        ${FONT_SOURCES}
 )
 
 # Include source files directories
 target_include_directories(main PRIVATE
         ${CMAKE_SOURCE_DIR}/src/platform
+        ${CMAKE_SOURCE_DIR}/src/lcd
+        ${CMAKE_SOURCE_DIR}/src/fonts
 )
 
 # Add all necessary libraries
