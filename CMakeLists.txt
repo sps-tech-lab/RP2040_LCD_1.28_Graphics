@@ -23,8 +23,14 @@ target_include_directories(main PRIVATE
         ${CMAKE_SOURCE_DIR}/src/platform
 )
 
-# Add pico_stdlib library which aggregates commonly used features
-target_link_libraries(main pico_stdlib)
+# Add all necessary libraries
+target_link_libraries(main
+        PRIVATE
+        pico_stdlib
+        hardware_pwm
+        hardware_spi
+        hardware_dma
+)
 
 # Create map/bin/hex/uf2 file in addition to ELF.
 pico_add_extra_outputs(main)

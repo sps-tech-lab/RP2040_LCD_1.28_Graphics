@@ -5,7 +5,10 @@
 #define PLATFORM_H
 
 #include <stdbool.h>
+#include <stdint.h>
+
 
 bool platform_init(void);
+void platform_set_backlight_level(uint8_t level);
 
 #endif //PLATFORM_H

@@ -4,6 +4,7 @@
 
 int main() {
     platform_init();
+    platform_set_backlight_level(30);
     printf("Hello, LCD!\n");
     return 0;
 }
