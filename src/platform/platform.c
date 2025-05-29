@@ -15,12 +15,15 @@ static struct
     int     dma_channel;
 }platform;
 
-
+/**
+ * @brief core hardware initialization
+ * @return result of initialization (not implemented)
+ */
 bool platform_init(void)
 {
     stdio_init_all();
 
-    //LCD config
+    //LCD gpio config
     gpio_init(WAVESHARE_LCD_DC_PIN);
     gpio_init(WAVESHARE_LCD_CS_PIN);
     gpio_init(WAVESHARE_LCD_SCLK_PIN);
@@ -75,6 +78,10 @@ bool platform_init(void)
     return true;
 }
 
+/**
+ * @brief backlight brightness level setter
+ * @param level - 0..100% brightness
+ */
 void platform_set_backlight_level(uint8_t level)
 {
     if(( level < 0 )||( level > 100 )){
