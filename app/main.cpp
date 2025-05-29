@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "pico/stdlib.h"
-#include "platform.h"
+#include "platform.hpp"
 
 int main() {
     platform_init();

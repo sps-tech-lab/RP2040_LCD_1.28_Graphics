@@ -14,8 +14,8 @@ pico_sdk_init()
 
 # Add executables
 add_executable(main
-        app/main.c
-        src/platform/platform.c
+        app/main.cpp
+        src/platform/platform.cpp
 )
 
 # Include source files directories

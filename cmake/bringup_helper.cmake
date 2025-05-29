@@ -19,7 +19,7 @@ message(STATUS "[BRINGUP HELPER] Included pico_sdk_import.cmake")
 # Check [picotool]
 if (NOT DEFINED ENV{PICOTOOL_FETCH_FROM_GIT_PATH})
     message(STATUS "[BRINGUP HELPER] Variable PICOTOOL_FETCH_FROM_GIT_PATH not set; using default")
-    set(PICOTOOL_FETCH_FROM_GIT_PATH "${CMAKE_SOURCE_DIR}/third_party/picotool")
+    set(PICOTOOL_FETCH_FROM_GIT_PATH "${CMAKE_SOURCE_DIR}/build/third_party/picotool")
 endif()
 
 

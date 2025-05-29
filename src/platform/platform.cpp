@@ -1,7 +1,7 @@
 //
 // Created by SPS on 28/05/2025.
 //
-#include "platform.h"
+#include "platform.hpp"
 #include <stdio.h>
 #include "pico/stdlib.h"
 #include "hardware/pwm.h"
