@@ -19,7 +19,7 @@ static struct
  * @brief core hardware initialization
  * @return result of initialization (not implemented)
  */
-bool platform_init(void)
+bool platform_init()
 {
     stdio_init_all();
 
@@ -57,22 +57,23 @@ bool platform_init(void)
     gpio_set_function(WAVESHARE_LCD_SCLK_PIN, GPIO_FUNC_SPI);
     gpio_set_function(WAVESHARE_LCD_TX_PIN, GPIO_FUNC_SPI);
 
-    //DMA config
-    platform.dma_channel = dma_claim_unused_channel(true);
-
-    // Configure the DMA channel for SPI1 TX
-    dma_channel_config config = dma_channel_get_default_config(platform.dma_channel);
-    channel_config_set_transfer_data_size(&config, DMA_SIZE_8);  // 8-bit transfers
-    channel_config_set_dreq(&config, DREQ_SPI1_TX);              // SPI1 TX as DMA request trigger
-
-    dma_channel_configure(
-            platform.dma_channel,     // DMA channel
-            &config,                  // Channel configuration
-            &spi_get_hw(spi1)->dr,    // Write to SPI1's data register
-            NULL,                     // Source address (set dynamically in dma_spi_write)
-            0,                        // Number of transfers (set dynamically in dma_spi_write)
-            false                     // Don't start yet
-    );
+    // //DMA config
+    // platform.dma_channel = dma_claim_unused_channel(true);
+    //
+    // // Configure the DMA channel for SPI1 TX
+    // dma_channel_config config = dma_channel_get_default_config(platform.dma_channel);
+    // channel_config_set_transfer_data_size(&config, DMA_SIZE_8);  // 8-bit transfers
+    // channel_config_set_dreq(&config, DREQ_SPI1_TX);              // SPI1 TX as DMA request trigger
+    //
+    // dma_channel_configure(
+    //         platform.dma_channel,     // DMA channel
+    //         &config,                  // Channel configuration
+    //         &spi_get_hw(spi1)->dr,    // Write to SPI1's data register
+    //         NULL,                     // Source address (set dynamically in dma_spi_write)
+    //         0,                        // Number of transfers (set dynamically in dma_spi_write)
+    //         false                     // Don't start yet
+    // );
+    // TODO: Implement it later under bsp config
 
     printf("Initialization finished\r\n");
     return true;
@@ -89,4 +90,13 @@ void platform_set_backlight_level(uint8_t level)
     }else{
         pwm_set_chan_level(platform.slice, PWM_CHAN_B, level);
     }
+}
+
+/**
+ * @brief dma channel getter
+ * @return dma_channel
+ */
+int platform_get_dma_channel()
+{
+    return platform.dma_channel;
 }
