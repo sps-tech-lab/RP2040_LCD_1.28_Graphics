@@ -12,13 +12,42 @@ project(RP2040_LCD_1.28_Graphics)
 # Initialize the Raspberry Pi Pico SDK
 pico_sdk_init()
 
-# Add executables
-add_executable(main
-        app/main.c
+# Collect all font sources
+file(GLOB FONT_SOURCES
+        ${CMAKE_SOURCE_DIR}/src/fonts/*.cpp
 )
 
-# Add pico_stdlib library which aggregates commonly used features
-target_link_libraries(main pico_stdlib)
+# Add executables
+add_executable(main
+        app/main.cpp
+        src/platform/platform.cpp
+        src/lcd/framebuffer.cpp
+        src/lcd/lcd.cpp
+        ${FONT_SOURCES}
+)
+
+# Include source files directories
+target_include_directories(main PRIVATE
+        ${CMAKE_SOURCE_DIR}/src/platform
+        ${CMAKE_SOURCE_DIR}/src/lcd
+        ${CMAKE_SOURCE_DIR}/src/fonts
+)
+
+# Add all necessary libraries
+target_link_libraries(main
+        PRIVATE
+        pico_stdlib
+        hardware_pwm
+        hardware_spi
+        hardware_dma
+)
 
 # Create map/bin/hex/uf2 file in addition to ELF.
 pico_add_extra_outputs(main)
+
+# Change uart pinout for main target TODO: create platform remap
+target_compile_definitions(main
+        PRIVATE
+        PICO_DEFAULT_UART_TX_PIN=16
+        PICO_DEFAULT_UART_RX_PIN=17
+)
