@@ -18,7 +18,7 @@ file(GLOB FONT_SOURCES
 )
 
 # Add executables
-add_executable(main
+add_executable(${PROJECT_NAME}
         app/main.cpp
         src/platform/platform.cpp
         src/lcd/framebuffer.cpp
@@ -27,14 +27,14 @@ add_executable(main
 )
 
 # Include source files directories
-target_include_directories(main PRIVATE
+target_include_directories(${PROJECT_NAME} PRIVATE
         ${CMAKE_SOURCE_DIR}/src/platform
         ${CMAKE_SOURCE_DIR}/src/lcd
         ${CMAKE_SOURCE_DIR}/src/fonts
 )
 
 # Add all necessary libraries
-target_link_libraries(main
+target_link_libraries(${PROJECT_NAME}
         PRIVATE
         pico_stdlib
         hardware_pwm
@@ -43,10 +43,13 @@ target_link_libraries(main
 )
 
 # Create map/bin/hex/uf2 file in addition to ELF.
-pico_add_extra_outputs(main)
+pico_add_extra_outputs(${PROJECT_NAME})
+
+# Add ELF size table to build report
+include(cmake/pico_size_tool.cmake)
 
 # Change uart pinout for main target TODO: create platform remap
-target_compile_definitions(main
+target_compile_definitions(${PROJECT_NAME}
         PRIVATE
         PICO_DEFAULT_UART_TX_PIN=16
         PICO_DEFAULT_UART_RX_PIN=17
