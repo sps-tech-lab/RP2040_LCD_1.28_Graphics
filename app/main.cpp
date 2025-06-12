@@ -34,5 +34,15 @@ int main() {
 
     lcd.update();
 
+    uint8_t counter = 0;
+    while (1)
+    {
+        lcd.drawText(100, 180, &font24, LCD_DARKGREY, LCD_BLACK, "%d", counter);
+        lcd.update();
+        if(++counter > 99){
+            counter = 0;
+        }
+    }
+
     return 0;
 }
