@@ -1,6 +1,8 @@
 #include "framebuffer.hpp"
 #include <stdint.h>
 #include <stdlib.h>
+#include <cstdarg>
+#include <cstdio>
 
 FrameBuffer::FrameBuffer(uint16_t* _canvas, uint8_t _width, uint8_t _height)
 {
@@ -222,6 +224,17 @@ void FrameBuffer::drawText(uint8_t x, uint8_t y, const char *str, font *_font, u
         //The next word of the abscissa increases the font of the broadband
         x_point += _font->width;
     }
+}
+
+void FrameBuffer::drawText(uint8_t x, uint8_t y, font *_font, uint16_t foreground, uint16_t background, const char* fmt, ...)
+{
+    char buf[32];
+    va_list args;
+    va_start(args, fmt);
+    vsnprintf(buf, sizeof(buf), fmt, args);
+    va_end(args);
+
+    drawText(x, y, buf, _font, foreground, background);
 }
 
 void FrameBuffer::darwGradientRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint16_t color1, uint16_t color2, bool direction)

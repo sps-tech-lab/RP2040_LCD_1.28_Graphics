@@ -51,6 +51,7 @@ struct FrameBuffer
     // text
     void drawChar(uint8_t, uint8_t, const char, font*, uint16_t, uint16_t);
     void drawText(uint8_t, uint8_t, const char *, font*, uint16_t, uint16_t);
+    void drawText(uint8_t, uint8_t, font*, uint16_t, uint16_t, const char* fmt, ...);
 };
 
 #endif //FRAMEBUFFER_H
