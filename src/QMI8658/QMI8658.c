@@ -1,6 +1,6 @@
 
-//#include "stdafx.h"
 #include "QMI8658.h"
+#include "hardware/i2c.h"
 
 #define QMI8658_SLAVE_ADDR_L 0x6a
 #define QMI8658_SLAVE_ADDR_H 0x6b
@@ -38,7 +38,8 @@ unsigned char QMI8658_write_reg(unsigned char reg, unsigned char value)
 
 	while ((!ret) && (retry++ < 5))
 	{
-		DEV_I2C_Write_Byte(QMI8658_slave_addr, reg, value);
+		uint8_t data[2] = {reg, value};
+		i2c_write_blocking(I2C_INSTANCE(PICO_DEFAULT_I2C), QMI8658_slave_addr, data, 2, false);
 	}
 	return ret;
 }
@@ -59,7 +60,9 @@ unsigned char QMI8658_read_reg(unsigned char reg, unsigned char *buf, unsigned s
 {
 	unsigned char ret = 0;
 	unsigned int retry = 0;
-	DEV_I2C_Read_nByte(QMI8658_slave_addr, reg, buf, len);
+
+	i2c_write_blocking(I2C_INSTANCE(PICO_DEFAULT_I2C), QMI8658_slave_addr, &reg, 1, true);
+	i2c_read_blocking(I2C_INSTANCE(PICO_DEFAULT_I2C), QMI8658_slave_addr, buf, len, false);
 
 	return ret;
 }

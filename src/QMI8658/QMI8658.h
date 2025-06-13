@@ -1,9 +1,7 @@
 #ifndef QMI8658_H
 #define QMI8658_H
 
-#include "DEV_Config.h"
 #include <stdint.h>
-#include <stdlib.h> //itoa()
 #include <stdio.h>
 
 #ifndef M_PI
