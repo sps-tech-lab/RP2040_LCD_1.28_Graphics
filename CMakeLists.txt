@@ -31,6 +31,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
         ${CMAKE_SOURCE_DIR}/src/platform
         ${CMAKE_SOURCE_DIR}/src/lcd
         ${CMAKE_SOURCE_DIR}/src/fonts
+        ${CMAKE_SOURCE_DIR}/src/QMI8658
 )
 
 # Add lib subdirectory

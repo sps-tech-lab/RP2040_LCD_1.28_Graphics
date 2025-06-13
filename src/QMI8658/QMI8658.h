@@ -4,6 +4,10 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef M_PI
 #define M_PI (3.14159265358979323846f)
 #endif
@@ -484,5 +488,9 @@ extern unsigned char QMI8658_readStatus1(void);
 extern float QMI8658_readTemp(void);
 extern void QMI8658_enableWakeOnMotion(void);
 extern void QMI8658_disableWakeOnMotion(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

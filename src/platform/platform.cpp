@@ -7,6 +7,7 @@
 #include "hardware/pwm.h"
 #include "hardware/spi.h"
 #include "hardware/dma.h"
+#include "hardware/i2c.h"
 
 //Local data
 static struct
@@ -21,8 +22,6 @@ static struct
  */
 bool platform_init()
 {
-    stdio_init_all();
-
     //LCD gpio config
     gpio_init(WAVESHARE_LCD_DC_PIN);
     gpio_init(WAVESHARE_LCD_CS_PIN);
@@ -41,6 +40,7 @@ bool platform_init()
     gpio_put(WAVESHARE_LCD_CS_PIN, true);
     gpio_put(WAVESHARE_LCD_DC_PIN, false);
     gpio_put(WAVESHARE_LCD_BL_PIN, true);
+    printf("[+] GPIO\r\n");
 
     //PWM Config
     gpio_set_function(WAVESHARE_LCD_BL_PIN, GPIO_FUNC_PWM);
@@ -51,29 +51,21 @@ bool platform_init()
     pwm_set_chan_level(platform.slice, PWM_CHAN_B, 0);
     pwm_set_clkdiv(platform.slice, 50);
     pwm_set_enabled(platform.slice, true);
+    printf("[+] PWM\r\n");
 
     // SPI Config
     spi_init(SPI_INSTANCE(WAVESHARE_LCD_SPI), 62500000); //Set maximal 62.5 MHz
     gpio_set_function(WAVESHARE_LCD_SCLK_PIN, GPIO_FUNC_SPI);
     gpio_set_function(WAVESHARE_LCD_TX_PIN, GPIO_FUNC_SPI);
+    printf("[+] SPI\r\n");
 
-    // //DMA config
-    // platform.dma_channel = dma_claim_unused_channel(true);
-    //
-    // // Configure the DMA channel for SPI1 TX
-    // dma_channel_config config = dma_channel_get_default_config(platform.dma_channel);
-    // channel_config_set_transfer_data_size(&config, DMA_SIZE_8);  // 8-bit transfers
-    // channel_config_set_dreq(&config, DREQ_SPI1_TX);              // SPI1 TX as DMA request trigger
-    //
-    // dma_channel_configure(
-    //         platform.dma_channel,     // DMA channel
-    //         &config,                  // Channel configuration
-    //         &spi_get_hw(spi1)->dr,    // Write to SPI1's data register
-    //         NULL,                     // Source address (set dynamically in dma_spi_write)
-    //         0,                        // Number of transfers (set dynamically in dma_spi_write)
-    //         false                     // Don't start yet
-    // );
-    // TODO: Implement it later under bsp config
+    //I2C Config
+    i2c_init(I2C_INSTANCE(PICO_DEFAULT_I2C), 1000000);
+    gpio_set_function(PICO_DEFAULT_I2C_SDA_PIN, GPIO_FUNC_I2C);
+    gpio_set_function(PICO_DEFAULT_I2C_SCL_PIN, GPIO_FUNC_I2C);
+    gpio_pull_up(PICO_DEFAULT_I2C_SDA_PIN);
+    gpio_pull_up(PICO_DEFAULT_I2C_SCL_PIN);
+    printf("[+] I2C\r\n");
 
     printf("Initialization finished\r\n");
     return true;
