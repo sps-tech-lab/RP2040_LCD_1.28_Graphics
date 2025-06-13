@@ -10,7 +10,8 @@
       "name":      "Waveshare_rp2040_lcd_1.28",
       "binaryDir": "${sourceDir}/build/waveshare_rp2040_lcd_1.28",
       "cacheVariables": {
-        "PICO_BOARD": "waveshare_rp2040_lcd_1.28"
+        "PICO_BOARD": "waveshare_rp2040_lcd_1.28",
+        "EXT_BOARD": "waveshare_lcd_1.28_pin_head"
       },
       "environment": {
         "PICO_SDK_PATH": "../../../pico-sdk"

@@ -48,9 +48,10 @@ pico_add_extra_outputs(${PROJECT_NAME})
 # Add ELF size table to build report
 include(cmake/pico_size_tool.cmake)
 
-# Change uart pinout for main target TODO: create platform remap
-target_compile_definitions(${PROJECT_NAME}
-        PRIVATE
-        PICO_DEFAULT_UART_TX_PIN=16
-        PICO_DEFAULT_UART_RX_PIN=17
-)
+# Add extension board (if it specified)
+if(DEFINED EXT_BOARD AND NOT EXT_BOARD STREQUAL "")
+    message(STATUS "Using extension board [${EXT_BOARD}] specifics")
+    include(ext_boards/${EXT_BOARD}/ext_board.cmake)
+endif()
+
+
