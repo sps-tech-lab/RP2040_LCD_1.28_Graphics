@@ -1,18 +1,29 @@
 
-# PICO CMAKE PROJECT
+# RP2040 LCD 1.28 Graphics
 
-![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/sps-tech-lab/pico-cmake-project?label=version)
-![License](https://img.shields.io/github/license/sps-tech-lab/pico-cmake-project)
+![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/sps-tech-lab/RP2040_LCD_1.28_Graphics?label=version)
+![License](https://img.shields.io/github/license/sps-tech-lab/RP2040_LCD_1.28_Graphics)
 
 ---
 
 ## About
-Here's a CMake project template for RP2040/3050 microcontrollers, 
-designed to give new projects a quick and easy start.
+This project based on [pico-cmake-project](https://github.com/sps-tech-lab/pico-cmake-project) 
+and [Waveshare RP2040-LCD-1.28](https://www.waveshare.com/wiki/RP2040-LCD-1.28) board.
+
+Features:
+- LCD driver
+- Basic graphical methods
+- Extensive boards support (on cmake level)
+- QMI8658 IMU library
+
+![Appearance](./readme/graphic_test.png)
+
+Demo extensive board (production files are included)
+![Appearance](./ext_boards/waveshare_lcd_1.28_pin_head/docs/waveshare_lcd_1.28_pin_head.png)
 
 ---
 
-## Getting Started
+## Getting Started with pico-cmake-project
 After cloning the repo, run:
 
 ```
@@ -31,8 +42,8 @@ create a new in CMakePresets.json.def and run ```bootstrap_presets.py ```again
 #### Command Line
 For command line it would be:
 ```
-cmake --preset <YourBoardPreset>
-cmake --build --preset <YourBoardPreset>
+cmake --preset Waveshare_rp2040_lcd_1.28
+cmake --build --preset Waveshare_rp2040_lcd_1.28
 ```
 
 After it, edit `CMakeLists.txt` in `<root_folder>`:
