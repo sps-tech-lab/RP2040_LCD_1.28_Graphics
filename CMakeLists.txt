@@ -31,7 +31,11 @@ target_include_directories(${PROJECT_NAME} PRIVATE
         ${CMAKE_SOURCE_DIR}/src/platform
         ${CMAKE_SOURCE_DIR}/src/lcd
         ${CMAKE_SOURCE_DIR}/src/fonts
+        ${CMAKE_SOURCE_DIR}/src/QMI8658
 )
+
+# Add lib subdirectory
+add_subdirectory(${CMAKE_SOURCE_DIR}/src/QMI8658)
 
 # Add all necessary libraries
 target_link_libraries(${PROJECT_NAME}
@@ -40,6 +44,7 @@ target_link_libraries(${PROJECT_NAME}
         hardware_pwm
         hardware_spi
         hardware_dma
+        QMI8658
 )
 
 # Create map/bin/hex/uf2 file in addition to ELF.
