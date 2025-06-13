@@ -7,18 +7,56 @@ include(cmake/bringup_helper.cmake)
 include(pico_sdk_import.cmake)
 
 # Project name
-project(pico-cmake-project)
+project(RP2040_LCD_1.28_Graphics)
 
 # Initialize the Raspberry Pi Pico SDK
 pico_sdk_init()
 
-# Add executables
-add_executable(main
-        app/main.c
+# Collect all font sources
+file(GLOB FONT_SOURCES
+        ${CMAKE_SOURCE_DIR}/src/fonts/*.cpp
 )
 
-# Add pico_stdlib library which aggregates commonly used features
-target_link_libraries(main pico_stdlib)
+# Add executables
+add_executable(${PROJECT_NAME}
+        app/main.cpp
+        src/platform/platform.cpp
+        src/lcd/framebuffer.cpp
+        src/lcd/lcd.cpp
+        ${FONT_SOURCES}
+)
+
+# Include source files directories
+target_include_directories(${PROJECT_NAME} PRIVATE
+        ${CMAKE_SOURCE_DIR}/src/platform
+        ${CMAKE_SOURCE_DIR}/src/lcd
+        ${CMAKE_SOURCE_DIR}/src/fonts
+        ${CMAKE_SOURCE_DIR}/src/QMI8658
+)
+
+# Add lib subdirectory
+add_subdirectory(${CMAKE_SOURCE_DIR}/src/QMI8658)
+
+# Add all necessary libraries
+target_link_libraries(${PROJECT_NAME}
+        PRIVATE
+        pico_stdlib
+        hardware_pwm
+        hardware_spi
+        hardware_dma
+        QMI8658
+)
 
 # Create map/bin/hex/uf2 file in addition to ELF.
-pico_add_extra_outputs(main)
+pico_add_extra_outputs(${PROJECT_NAME})
+
+# Add ELF size table to build report
+include(cmake/pico_size_tool.cmake)
+
+# Add extension board (if it specified)
+if(DEFINED EXT_BOARD AND NOT EXT_BOARD STREQUAL "")
+    message(STATUS "Using extension board [${EXT_BOARD}] specifics")
+    include(ext_boards/${EXT_BOARD}/ext_board.cmake)
+endif()
+
+
