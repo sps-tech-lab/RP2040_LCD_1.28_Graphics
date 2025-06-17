@@ -22,4 +22,7 @@ extern font roboto_reg_16;
 extern font roboto_reg_20;
 extern font roboto_reg_24;
 
+extern font PermanentMarker_Regular_16;
+extern font PermanentMarker_Regular_20;
+
 #endif

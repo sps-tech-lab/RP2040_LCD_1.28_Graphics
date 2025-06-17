@@ -22,7 +22,7 @@ int main() {
     LCD lcd((uint16_t *) &fbuf, HORIZONTAL);
 
     lcd.fillScreen(LCD_BLACK);
-    lcd.drawText(43, 100, "Rp2040 Test", &roboto_reg_16, LCD_DARKGREY, LCD_BLACK);
+    lcd.drawText(28, 100, "Rp2040 Test", &PermanentMarker_Regular_20, LCD_DARKGREY, LCD_BLACK);
 
     //Color test
     lcd.drawRect( 20, 140, 40, 160,     LCD_MAROON,     1, true);
