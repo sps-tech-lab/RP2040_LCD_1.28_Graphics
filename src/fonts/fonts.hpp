@@ -17,4 +17,9 @@ extern font font20;
 extern font font16;
 extern font font12;
 
+extern font roboto_reg_12;
+extern font roboto_reg_16;
+extern font roboto_reg_20;
+extern font roboto_reg_24;
+
 #endif
