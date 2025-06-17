@@ -37,6 +37,7 @@ import sys
 import os
 import argparse
 import math
+import re
 
 CHAR_RANGE = range(32, 127)  # Printable ASCII
 
@@ -89,6 +90,17 @@ def main():
     parser.add_argument("-o", "--output", default="font.cpp", help="Output .cpp file (default: font.cpp)")
     args = parser.parse_args()
 
+    # Sanitize font filename for use in output
+    font_base = os.path.basename(args.font_path)
+    font_base_no_ext = os.path.splitext(font_base)[0]
+    safe_name = re.sub(r'\W+', '_', font_base_no_ext)  # Replace non-word characters with '_'
+
+    # Auto-name output file if not specified
+    if args.output == "font.cpp":
+        args.output = f"{safe_name}_{args.size}.cpp"
+
+    output_base_name = os.path.splitext(os.path.basename(args.output))[0]
+
     if not os.path.exists(args.font_path):
         print(f"❌ Font file not found: {args.font_path}")
         sys.exit(1)
@@ -136,7 +148,7 @@ def main():
             out.write("\n")
 
         out.write("};\n\n")
-        out.write(f"font font{args.size}(Font{args.size}_Table, {args.width}, {args.size});\n")
+        out.write(f"font {output_base_name}(Font{args.size}_Table, {args.width}, {args.size});\n")
 
     print(f"✅ Font generated: {args.output} ({len(CHAR_RANGE)} glyphs × {bytes_per_glyph} bytes)")
 
