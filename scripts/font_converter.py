@@ -22,11 +22,14 @@ Arguments:
         Font pixel height (default: 12)
 
   -w, --width WIDTH
-        Font pixel width (default: 10)
+        Font pixel width (default: auto-detect)
         [Hint] check conversion output to see if any glyphs will be cropped
 
   -o, --output OUTPUT
         Output .cpp file (default: font.cpp)
+
+  -fd, --fix-dash <y>
+        Move '-' character up by <y> pixels during rendering
 
 Examples:
   python3 ./scripts/font_converter.py ./Roboto-Black.ttf -s 24 -o font24.cpp
@@ -41,18 +44,22 @@ import re
 
 CHAR_RANGE = range(32, 127)  # Printable ASCII
 
-def render_glyph_bitmap(face, char, width, height):
+def render_glyph_bitmap(face, char, width, height, dash_offset=0):
     face.load_char(char, freetype.FT_LOAD_RENDER)
     bitmap = face.glyph.bitmap
 
     # Create empty fixed-size buffer
     fixed = [[0] * width for _ in range(height)]
 
-    # Center smaller bitmaps into fixed box
-    x_off = max((width - bitmap.width) // 2, 0)
-    y_off = max((height - bitmap.rows), 0)  # Top-aligned, can change to center if preferred
+    # Dash offset override
+    y_off = max((height - bitmap.rows), 0)
+    if char == '-' and dash_offset > 0:
+        y_off = max(y_off - dash_offset, 0)
 
-    for y in range(min(bitmap.rows, height)):
+    # Center horizontally
+    x_off = max((width - bitmap.width) // 2, 0)
+
+    for y in range(min(bitmap.rows, height - y_off)):
         for x in range(min(bitmap.width, width)):
             pixel = bitmap.buffer[y * bitmap.width + x]
             if pixel > 128:
@@ -61,7 +68,6 @@ def render_glyph_bitmap(face, char, width, height):
     return fixed
 
 def pack_bitmap_rows(bitmap, width):
-    """Pack each row of bits into bytes."""
     bytes_per_row = math.ceil(width / 8)
     packed = []
 
@@ -86,20 +92,21 @@ def main():
     parser = argparse.ArgumentParser(description="Convert TTF to fixed-size C++ bitmap font array")
     parser.add_argument("font_path", help="Path to the .ttf font file")
     parser.add_argument("-s", "--size", type=int, default=12, help="Font pixel height (default: 12)")
-    parser.add_argument("-w", "--width", type=int, default=10, help="Font pixel width (default: 10)")
+    parser.add_argument("-w", "--width", type=int, default=None, help="Font pixel width (auto-detect if not set)")
     parser.add_argument("-o", "--output", default="font.cpp", help="Output .cpp file (default: font.cpp)")
+    parser.add_argument("-fd", "--fix-dash", type=int, default=0, help="Shift dash '-' character up by Y pixels")
     args = parser.parse_args()
 
     # Sanitize font filename for use in output
     font_base = os.path.basename(args.font_path)
     font_base_no_ext = os.path.splitext(font_base)[0]
-    safe_name = re.sub(r'\W+', '_', font_base_no_ext)  # Replace non-word characters with '_'
+    safe_name = re.sub(r'\W+', '_', font_base_no_ext).lower()
 
     # Auto-name output file if not specified
     if args.output == "font.cpp":
         args.output = f"{safe_name}_{args.size}.cpp"
 
-    output_base_name = os.path.splitext(os.path.basename(args.output))[0]
+    output_base_name = os.path.splitext(os.path.basename(args.output))[0].lower()
 
     if not os.path.exists(args.font_path):
         print(f"❌ Font file not found: {args.font_path}")
@@ -120,7 +127,11 @@ def main():
 
         # Warn if user's width is smaller than any glyph
         print(f"ℹ️  Detected max glyph width: {max_width_detected} pixels")
-        print(f"ℹ️  Using specified output width: {args.width} pixels")
+        if args.width is None:
+            args.width = max_width_detected
+            print(f"ℹ️  Auto-setting output width to: {args.width} pixels (based on font scan)")
+        else:
+            print(f"ℹ️  Using specified output width: {args.width} pixels")
         if args.width < max_width_detected:
             print("⚠️  Warning: Some glyphs will be cropped horizontally!")
 
@@ -137,7 +148,7 @@ def main():
 
         for char_code in CHAR_RANGE:
             char = chr(char_code)
-            fixed_bitmap = render_glyph_bitmap(face, char, args.width, args.size)
+            fixed_bitmap = render_glyph_bitmap(face, char, args.width, args.size, args.fix_dash)
             packed_bytes = pack_bitmap_rows(fixed_bitmap, args.width)
 
             out.write(f"    // @{char_code * bytes_per_glyph} '{char}' ({args.width}x{args.size} pixels)\n")

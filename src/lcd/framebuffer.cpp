@@ -165,34 +165,26 @@ void FrameBuffer::fillScreen(uint16_t color)
     }
 }
 
-void FrameBuffer::drawChar(uint8_t x, uint8_t y, const char ascii, font *font, uint16_t foreground, uint16_t background)
+void FrameBuffer::drawChar(uint8_t x, uint8_t y, const char ascii, font* font, uint16_t foreground, uint16_t background)
 {
-    uint16_t page, column;
+    if (x >= this->width || y >= this->height) return;
 
-    if( x >= this->width || y >= this->height ) return;
+    // Calculate glyph offset
+    uint8_t bytes_per_row = (font->width + 7) / 8;
+    uint32_t offset = (ascii - ' ') * font->height * bytes_per_row;
+    const uint8_t* ptr = &font->table[offset];
 
-    uint32_t offset = (ascii - ' ') * font->height * (font->width / 8 + (font->width % 8 ? 1 : 0));
-    const unsigned char *ptr = &font->table[offset];
+    for (uint8_t row = 0; row < font->height; row++) {
+        for (uint8_t col = 0; col < font->width; col++) {
+            uint8_t byte = ptr[col / 8];
+            bool pixel_on = byte & (0x80 >> (col % 8));
 
-    for (page = 0; page < font->height; page++) 
-    {
-        for (column = 0; column < font->width; column++)
-        {
-            // To determine whether the font background color and screen background color is consistent
-            if(*ptr & (0x80 >> (column % 8))){
-                this->setPixel(x + column, y + page, background);
-            }else{
-                this->setPixel(x + column, y + page, foreground);
-            }
-            //One pixel is 8 bits
-            if(column % 8 == 7){
-                ptr++;
-            }
+            this->setPixel(x + col, y + row, pixel_on ? background : foreground);
         }
-        if(font->width % 8 != 0)
-            ptr++;
+        ptr += bytes_per_row;  // Advance to next row
     }
 }
+
 
 void FrameBuffer::drawText(uint8_t x, uint8_t y, const char *str, font *_font, uint16_t foreground, uint16_t background)
 {
