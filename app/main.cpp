@@ -22,7 +22,7 @@ int main() {
     LCD lcd((uint16_t *) &fbuf, HORIZONTAL);
 
     lcd.fillScreen(LCD_BLACK);
-    lcd.drawText(28, 100, "Rp2040 Test", &PermanentMarker_Regular_20, LCD_DARKGREY, LCD_BLACK);
+    lcd.drawText(28, 100, "Rp2040 Test", &permanent_marker_regular_20, LCD_DARKGREY, LCD_BLACK);
 
     //Color test
     lcd.drawRect( 20, 140, 40, 160,     LCD_MAROON,     1, true);
@@ -51,11 +51,11 @@ int main() {
     while (1)
     {
         QMI8658_read_xyz(acc, gyro, &tim_count);
-        lcd.drawText(68, 30, &roboto_reg_12, LCD_DARKGREY, LCD_BLACK, "G.x %.2f", gyro[0]);
-        lcd.drawText(68, 50, &roboto_reg_12, LCD_DARKGREY, LCD_BLACK, "G.y %.2f", gyro[1]);
-        lcd.drawText(68, 70, &roboto_reg_12, LCD_DARKGREY, LCD_BLACK, "G.z %.2f", gyro[2]);
+        lcd.drawText(68, 30, &oswald_medium_12, LCD_DARKGREY, LCD_BLACK, "G.x %.2f", gyro[0]);
+        lcd.drawText(68, 50, &oswald_medium_12, LCD_DARKGREY, LCD_BLACK, "G.y %.2f", gyro[1]);
+        lcd.drawText(68, 70, &oswald_medium_12, LCD_DARKGREY, LCD_BLACK, "G.z %.2f", gyro[2]);
 
-        lcd.drawText(100, 180, &roboto_reg_24, LCD_DARKGREY, LCD_BLACK, "%d", counter);
+        lcd.drawText(100, 180, &oswald_medium_24, LCD_DARKGREY, LCD_BLACK, "%d", counter);
         lcd.update();
         if(++counter > 99){
             counter = 0;
