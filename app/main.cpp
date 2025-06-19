@@ -55,7 +55,7 @@ int main() {
         lcd.drawText(68, 50, &oswald_medium_12, LCD_DARKGREY, LCD_BLACK, "G.y %.2f", gyro[1]);
         lcd.drawText(68, 70, &oswald_medium_12, LCD_DARKGREY, LCD_BLACK, "G.z %.2f", gyro[2]);
 
-        lcd.drawText(100, 180, &oswald_medium_24, LCD_DARKGREY, LCD_BLACK, "%d", counter);
+        lcd.drawText(85, 180, &oswald_medium_36, LCD_DARKGREY, LCD_BLACK, "%d", counter);
         lcd.update();
         if(++counter > 99){
             counter = 0;

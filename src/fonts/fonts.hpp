@@ -32,16 +32,19 @@ extern font oswald_light_12;
 extern font oswald_light_16;
 extern font oswald_light_20;
 extern font oswald_light_24;
+extern font oswald_light_36;
 
 extern font oswald_medium_12;
 extern font oswald_medium_16;
 extern font oswald_medium_20;
 extern font oswald_medium_24;
+extern font oswald_medium_36;
 
 extern font oswald_regular_12;
 extern font oswald_regular_16;
 extern font oswald_regular_20;
 extern font oswald_regular_24;
+extern font oswald_regular_36;
 
 
 #endif
