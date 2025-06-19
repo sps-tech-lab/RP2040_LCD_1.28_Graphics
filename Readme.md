@@ -13,10 +13,11 @@ and [Waveshare RP2040-LCD-1.28](https://www.waveshare.com/wiki/RP2040-LCD-1.28) 
 Features:
 - LCD driver
 - Basic graphical methods
+- Fonts converter
 - Extensive boards support (on cmake level)
 - QMI8658 IMU library
 
-![Appearance](./readme/graphic_test.png)
+![Appearance](./readme/preview.png)
 
 Demo extensive board (production files are included)
 ![Appearance](./ext_boards/waveshare_lcd_1.28_pin_head/docs/waveshare_lcd_1.28_pin_head.png)
