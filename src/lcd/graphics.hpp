@@ -26,6 +26,14 @@
 #define LCD_DARKCYAN    0x03EF
 #define LCD_NAVY        0x000F
 
+/**
+ * @brief Convert 8-bit R,G,B (0–255) into a 16-bit RGB565 value.
+ */
+#define RGB565(r, g, b) ( \
+(uint16_t)( ((uint16_t)((r) & 0xF8) << 8) | \
+((uint16_t)((g) & 0xFC) << 3) | \
+((uint16_t)((b) & 0xF8) >> 3) ) )
+
 struct FrameBuffer
 {
     uint16_t* canvas;
@@ -52,6 +60,33 @@ struct FrameBuffer
     void drawChar(uint8_t, uint8_t, const char, font*, uint16_t, uint16_t);
     void drawText(uint8_t, uint8_t, const char *, font*, uint16_t, uint16_t);
     void drawText(uint8_t, uint8_t, font*, uint16_t, uint16_t, const char* fmt, ...);
+
+    /**
+     * @brief Draw a full-color bitmap.
+     * @param x      top-left x
+     * @param y      top-left y
+     * @param w      bitmap width in pixels
+     * @param h      bitmap height in pixels
+     * @param data   pointer to w*h uint16_t pixels (row-major)
+     */
+    void drawBitmap(uint8_t x, uint8_t y,
+                    uint8_t w, uint8_t h,
+                    const uint16_t* data);
+
+    /**
+     * @brief Draw a packed 1-bit monochrome bitmap.
+     * @param x      top-left x
+     * @param y      top-left y
+     * @param w      bitmap width in pixels
+     * @param h      bitmap height in pixels
+     * @param data   pointer to ( (w+7)/8 * h ) bytes, MSB first
+     * @param fg     pixel color when bit==1
+     * @param bg     pixel color when bit==0
+     */
+    void drawMonoBitmap(uint8_t x, uint8_t y,
+                        uint8_t w, uint8_t h,
+                        const uint8_t* data,
+                        uint16_t fg, uint16_t bg);
 };
 
 #endif //FRAMEBUFFER_H

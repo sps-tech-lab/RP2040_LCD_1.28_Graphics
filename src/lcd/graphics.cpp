@@ -1,4 +1,4 @@
-#include "framebuffer.hpp"
+#include "graphics.hpp"
 #include <stdint.h>
 #include <stdlib.h>
 #include <cstdarg>
@@ -269,4 +269,27 @@ uint16_t FrameBuffer::alphaBlend(uint8_t alpha, uint16_t color1, uint16_t color2
     xgx += ((color1 & 0x07E0) - xgx) * alpha >> 8;
     // Recombine channels
     return (rxb & 0xF81F) | (xgx & 0x07E0);
+}
+
+void FrameBuffer::drawBitmap(uint8_t x, uint8_t y, uint8_t w, uint8_t h, const uint16_t* data)
+{
+    for(uint8_t row = 0; row < h; ++row) {
+        for(uint8_t col = 0; col < w; ++col) {
+            setPixel(x + col, y + row,
+                     data[row * w + col]);
+        }
+    }
+}
+
+void FrameBuffer::drawMonoBitmap(uint8_t x, uint8_t y, uint8_t w, uint8_t h, const uint8_t* data, uint16_t fg, uint16_t bg)
+{
+    uint8_t bytesPerRow = (w + 7) / 8;
+    for(uint8_t row = 0; row < h; ++row) {
+        const uint8_t* ptr = data + row * bytesPerRow;
+        for(uint8_t col = 0; col < w; ++col) {
+            bool bit = ptr[col >> 3] & (0x80 >> (col & 7));
+            setPixel(x + col, y + row,
+                     bit ? fg : bg);
+        }
+    }
 }

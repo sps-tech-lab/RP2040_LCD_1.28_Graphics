@@ -25,7 +25,8 @@ extern font roboto_reg_20;
 extern font roboto_reg_24;
 
 //Fancy fonts
-extern font permanent_marker_regular_20;
+extern font permanentmarker_regular_12;
+extern font permanentmarker_regular_20;
 
 //Oswald fonts
 extern font oswald_light_12;

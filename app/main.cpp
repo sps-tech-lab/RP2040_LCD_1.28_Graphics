@@ -22,19 +22,19 @@ int main() {
     LCD lcd((uint16_t *) &fbuf, HORIZONTAL);
 
     lcd.fillScreen(LCD_BLACK);
-    lcd.drawText(28, 100, "Rp2040 Test", &permanent_marker_regular_20, LCD_DARKGREY, LCD_BLACK);
+    lcd.drawText(70, 210, "SPS TECH", &permanentmarker_regular_12, LCD_DARKGREY, LCD_BLACK);
 
-    //Color test
-    lcd.drawRect( 20, 140, 40, 160,     LCD_MAROON,     1, true);
-    lcd.drawRect( 40, 140, 60, 160,     LCD_RED,        1, true);
-    lcd.drawRect( 60, 140, 80, 160,     LCD_ORANGE,     1, true);
-    lcd.drawRect( 80, 140, 100, 160,    LCD_YELLOW,     1, true);
-    lcd.drawRect( 100, 140, 120, 160,   LCD_GREENYELLOW,1, true);
-    lcd.drawRect( 120, 140, 140, 160,   LCD_GREEN,      1, true);
-    lcd.drawRect( 140, 140, 160, 160,   LCD_CYAN,       1, true);
-    lcd.drawRect( 160, 140, 180, 160,   LCD_BLUE,       1, true);
-    lcd.drawRect( 180, 140, 200, 160,   LCD_MAGENTA,    1, true);
-    lcd.drawRect( 200, 140, 220, 160,   LCD_PURPLE,     1, true);
+    lcd.drawCircle(170, 60, 29, RGB565(149,228,172), 1, true);
+    lcd.drawText(151, 41, "17", &oswald_medium_20, LCD_BLACK, RGB565(149,228,172));
+    lcd.drawText(148, 65, "JUNE", &oswald_medium_12, LCD_BLACK, RGB565(149,228,172));
+
+    //Time
+    lcd.drawText(72,  100, ":",  &oswald_medium_36, LCD_DARKGREY, LCD_BLACK);
+    lcd.drawText(142, 100, ":",  &oswald_medium_36, LCD_DARKGREY, LCD_BLACK);
+    lcd.drawText(20,  100, "15", &oswald_medium_36, LCD_DARKGREY, LCD_BLACK);
+    lcd.drawText(90,  100, "01", &oswald_medium_36, LCD_DARKGREY, LCD_BLACK);
+    lcd.drawText(160, 100, "38", &oswald_medium_36, LCD_DARKGREY, LCD_BLACK);
+
     lcd.update();
 
     //IMU test
@@ -48,20 +48,20 @@ int main() {
     printf("tim_count = %d\r\n", tim_count);
 
     uint8_t counter = 0;
-    while (1)
-    {
-        QMI8658_read_xyz(acc, gyro, &tim_count);
-        lcd.drawText(68, 30, &oswald_medium_12, LCD_DARKGREY, LCD_BLACK, "G.x %.2f", gyro[0]);
-        lcd.drawText(68, 50, &oswald_medium_12, LCD_DARKGREY, LCD_BLACK, "G.y %.2f", gyro[1]);
-        lcd.drawText(68, 70, &oswald_medium_12, LCD_DARKGREY, LCD_BLACK, "G.z %.2f", gyro[2]);
-
-        lcd.drawText(85, 180, &oswald_medium_36, LCD_DARKGREY, LCD_BLACK, "%d", counter);
-        lcd.update();
-        if(++counter > 99){
-            counter = 0;
-        }
-
-    }
+    // while (1)
+    // {
+    //     QMI8658_read_xyz(acc, gyro, &tim_count);
+    //     lcd.drawText(68, 30, &oswald_medium_12, LCD_DARKGREY, LCD_BLACK, "G.x %.2f", gyro[0]);
+    //     lcd.drawText(68, 50, &oswald_medium_12, LCD_DARKGREY, LCD_BLACK, "G.y %.2f", gyro[1]);
+    //     lcd.drawText(68, 70, &oswald_medium_12, LCD_DARKGREY, LCD_BLACK, "G.z %.2f", gyro[2]);
+    //
+    //     lcd.drawText(85, 180, &oswald_medium_36, LCD_DARKGREY, LCD_BLACK, "%d", counter);
+    //     lcd.update();
+    //     if(++counter > 99){
+    //         counter = 0;
+    //     }
+    //
+    // }
 
     return 0;
 }

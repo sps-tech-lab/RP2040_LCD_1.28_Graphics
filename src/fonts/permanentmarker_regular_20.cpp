@@ -3043,4 +3043,4 @@ const uint8_t Font20_Table [] = {
 
 };
 
-font permanent_marker_regular_20(Font20_Table, 17, 20);
+font permanentmarker_regular_20(Font20_Table, 17, 20);

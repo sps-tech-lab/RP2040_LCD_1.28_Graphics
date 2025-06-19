@@ -21,7 +21,7 @@ file(GLOB FONT_SOURCES
 add_executable(${PROJECT_NAME}
         app/main.cpp
         src/platform/platform.cpp
-        src/lcd/framebuffer.cpp
+        src/lcd/graphics.cpp
         src/lcd/lcd.cpp
         ${FONT_SOURCES}
 )
