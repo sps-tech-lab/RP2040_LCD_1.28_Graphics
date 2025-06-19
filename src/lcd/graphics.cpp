@@ -1,4 +1,4 @@
-#include "framebuffer.hpp"
+#include "graphics.hpp"
 #include <stdint.h>
 #include <stdlib.h>
 #include <cstdarg>
@@ -165,34 +165,26 @@ void FrameBuffer::fillScreen(uint16_t color)
     }
 }
 
-void FrameBuffer::drawChar(uint8_t x, uint8_t y, const char ascii, font *font, uint16_t foreground, uint16_t background)
+void FrameBuffer::drawChar(uint8_t x, uint8_t y, const char ascii, font* font, uint16_t foreground, uint16_t background)
 {
-    uint16_t page, column;
+    if (x >= this->width || y >= this->height) return;
 
-    if( x >= this->width || y >= this->height ) return;
+    // Calculate glyph offset
+    uint8_t bytes_per_row = (font->width + 7) / 8;
+    uint32_t offset = (ascii - ' ') * font->height * bytes_per_row;
+    const uint8_t* ptr = &font->table[offset];
 
-    uint32_t offset = (ascii - ' ') * font->height * (font->width / 8 + (font->width % 8 ? 1 : 0));
-    const unsigned char *ptr = &font->table[offset];
+    for (uint8_t row = 0; row < font->height; row++) {
+        for (uint8_t col = 0; col < font->width; col++) {
+            uint8_t byte = ptr[col / 8];
+            bool pixel_on = byte & (0x80 >> (col % 8));
 
-    for (page = 0; page < font->height; page++) 
-    {
-        for (column = 0; column < font->width; column++)
-        {
-            // To determine whether the font background color and screen background color is consistent
-            if(*ptr & (0x80 >> (column % 8))){
-                this->setPixel(x + column, y + page, background);
-            }else{
-                this->setPixel(x + column, y + page, foreground);
-            }
-            //One pixel is 8 bits
-            if(column % 8 == 7){
-                ptr++;
-            }
+            this->setPixel(x + col, y + row, pixel_on ? background : foreground);
         }
-        if(font->width % 8 != 0)
-            ptr++;
+        ptr += bytes_per_row;  // Advance to next row
     }
 }
+
 
 void FrameBuffer::drawText(uint8_t x, uint8_t y, const char *str, font *_font, uint16_t foreground, uint16_t background)
 {
@@ -277,4 +269,47 @@ uint16_t FrameBuffer::alphaBlend(uint8_t alpha, uint16_t color1, uint16_t color2
     xgx += ((color1 & 0x07E0) - xgx) * alpha >> 8;
     // Recombine channels
     return (rxb & 0xF81F) | (xgx & 0x07E0);
+}
+
+void FrameBuffer::drawBitmap(uint8_t x, uint8_t y, uint8_t w, uint8_t h, const uint16_t* data)
+{
+    for(uint8_t row = 0; row < h; ++row) {
+        for(uint8_t col = 0; col < w; ++col) {
+            setPixel(x + col, y + row,
+                     data[row * w + col]);
+        }
+    }
+}
+
+void FrameBuffer::drawMonoBitmap(uint8_t x, uint8_t y, uint8_t w, uint8_t h, const uint8_t* data, uint16_t fg, uint16_t bg)
+{
+    uint8_t bytesPerRow = (w + 7) / 8;
+    for(uint8_t row = 0; row < h; ++row) {
+        const uint8_t* ptr = data + row * bytesPerRow;
+        for(uint8_t col = 0; col < w; ++col) {
+            bool bit = ptr[col >> 3] & (0x80 >> (col & 7));
+            setPixel(x + col, y + row,
+                     bit ? fg : bg);
+        }
+    }
+}
+
+void FrameBuffer::draw_gImage(int x, int y, const unsigned char *data)
+{
+    //Parse that 8-byte head
+    uint16_t w =  uint16_t(data[2])|(uint16_t(data[3]) << 8);
+    uint16_t h =  uint16_t(data[4])|(uint16_t(data[5]) << 8);
+
+    //Actual pixel data begins at data+8
+    const unsigned char *pixels = data + 8;
+
+    for (uint16_t row = 0; row < h; ++row) {
+        for (uint16_t col = 0; col < w; ++col) {
+            size_t idx = 2*(row * w + col);
+
+            // little-endian
+            uint16_t raw = (uint16_t(pixels[idx+1]) << 8)| uint16_t(pixels[idx]);
+            setPixel(x + col, y + row, raw);
+        }
+    }
 }

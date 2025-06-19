@@ -2,7 +2,7 @@
 #define __LCD_H	
 
 #include <stdint.h>
-#include "framebuffer.hpp"
+#include "graphics.hpp"
 
 
 //Display resolution

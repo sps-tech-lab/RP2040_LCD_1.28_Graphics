@@ -21,7 +21,8 @@ file(GLOB FONT_SOURCES
 add_executable(${PROJECT_NAME}
         app/main.cpp
         src/platform/platform.cpp
-        src/lcd/framebuffer.cpp
+        src/lcd/graphics.cpp
+        src/lcd/bitmaps.cpp
         src/lcd/lcd.cpp
         ${FONT_SOURCES}
 )
@@ -46,6 +47,9 @@ target_link_libraries(${PROJECT_NAME}
         hardware_dma
         QMI8658
 )
+
+# Add floating-point printf support from newlib-nano
+target_link_options(${PROJECT_NAME} PRIVATE "-Wl,-u,_printf_float")
 
 # Create map/bin/hex/uf2 file in addition to ELF.
 pico_add_extra_outputs(${PROJECT_NAME})

@@ -1,6 +1,6 @@
 #include "lcd.hpp"
 #include <stdio.h>
-#include "framebuffer.hpp"
+#include "graphics.hpp"
 #include "pico/stdlib.h"
 #include "hardware/spi.h"
 #include "hardware/dma.h"
