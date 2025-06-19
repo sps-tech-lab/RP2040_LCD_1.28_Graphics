@@ -22,6 +22,7 @@ add_executable(${PROJECT_NAME}
         app/main.cpp
         src/platform/platform.cpp
         src/lcd/graphics.cpp
+        src/lcd/bitmaps.cpp
         src/lcd/lcd.cpp
         ${FONT_SOURCES}
 )

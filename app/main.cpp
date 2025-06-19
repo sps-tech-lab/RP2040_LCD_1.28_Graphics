@@ -4,6 +4,7 @@
 
 #include "lcd.hpp"
 #include "fonts.hpp"
+#include "bitmaps.hpp"
 #include "QMI8658.h"
 
 //Test framebuffer
@@ -28,13 +29,15 @@ int main() {
     lcd.drawText(151, 41, "17", &oswald_medium_20, LCD_BLACK, RGB565(149,228,172));
     lcd.drawText(148, 65, "JUNE", &oswald_medium_12, LCD_BLACK, RGB565(149,228,172));
 
-    //Time
+    //Time (just demo)
     lcd.drawText(72,  100, ":",  &oswald_medium_36, LCD_DARKGREY, LCD_BLACK);
     lcd.drawText(142, 100, ":",  &oswald_medium_36, LCD_DARKGREY, LCD_BLACK);
     lcd.drawText(20,  100, "15", &oswald_medium_36, LCD_DARKGREY, LCD_BLACK);
     lcd.drawText(90,  100, "01", &oswald_medium_36, LCD_DARKGREY, LCD_BLACK);
     lcd.drawText(160, 100, "38", &oswald_medium_36, LCD_DARKGREY, LCD_BLACK);
 
+    //gImage
+    lcd.draw_gImage( 40,  31, gImage_ava);
     lcd.update();
 
     //IMU test

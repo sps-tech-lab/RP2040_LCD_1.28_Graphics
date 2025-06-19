@@ -293,3 +293,24 @@ void FrameBuffer::drawMonoBitmap(uint8_t x, uint8_t y, uint8_t w, uint8_t h, con
         }
     }
 }
+
+void FrameBuffer::draw_gImage(int x, int y, const unsigned char *data)
+{
+    //Parse that 8-byte head
+    uint16_t w =  uint16_t(data[2])|(uint16_t(data[3]) << 8);
+    uint16_t h =  uint16_t(data[4])|(uint16_t(data[5]) << 8);
+
+    //Actual pixel data begins at data+8
+    const unsigned char *pixels = data + 8;
+
+    for (uint16_t row = 0; row < h; ++row) {
+        for (uint16_t col = 0; col < w; ++col) {
+            size_t idx = 2*(row * w + col);
+            // each pixel is high-byte,low-byte RGB565
+            uint16_t raw =
+              (uint16_t(pixels[idx]) << 8) |
+               uint16_t(pixels[idx + 1]);
+            setPixel(x + col, y + row, raw);
+        }
+    }
+}
