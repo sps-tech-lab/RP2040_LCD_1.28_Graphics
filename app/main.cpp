@@ -25,9 +25,9 @@ int main() {
     lcd.fillScreen(LCD_BLACK);
     lcd.drawText(70, 210, "SPS TECH", &permanentmarker_regular_12, LCD_DARKGREY, LCD_BLACK);
 
-    lcd.drawCircle(170, 60, 29, RGB565(149,228,172), 1, true);
-    lcd.drawText(151, 41, "17", &oswald_medium_20, LCD_BLACK, RGB565(149,228,172));
-    lcd.drawText(148, 65, "JUNE", &oswald_medium_12, LCD_BLACK, RGB565(149,228,172));
+    lcd.drawCircle(168, 60, 29, RGB565(149,235,172), 1, true);
+    lcd.drawText(150, 41, "17", &oswald_bold_20, LCD_BLACK, RGB565(149,228,172));
+    lcd.drawText(145, 65, "JUNE", &oswald_bold_12, LCD_BLACK, RGB565(149,228,172));
 
     //Time (just demo)
     lcd.drawText(72,  100, ":",  &oswald_medium_36, LCD_DARKGREY, LCD_BLACK);
@@ -37,7 +37,7 @@ int main() {
     lcd.drawText(160, 100, "38", &oswald_medium_36, LCD_DARKGREY, LCD_BLACK);
 
     //gImage
-    lcd.draw_gImage( 40,  31, gImage_ava);
+    lcd.draw_gImage( 42,  31, gImage_ava);
     lcd.update();
 
     //IMU test
@@ -50,21 +50,16 @@ int main() {
     printf("gyro_x  = %4.3fdps, gyro_y = %4.3fdps, gyro_z = %4.3fdps\r\n", gyro[0], gyro[1], gyro[2]);
     printf("tim_count = %d\r\n", tim_count);
 
-    uint8_t counter = 0;
-    // while (1)
-    // {
-    //     QMI8658_read_xyz(acc, gyro, &tim_count);
-    //     lcd.drawText(68, 30, &oswald_medium_12, LCD_DARKGREY, LCD_BLACK, "G.x %.2f", gyro[0]);
-    //     lcd.drawText(68, 50, &oswald_medium_12, LCD_DARKGREY, LCD_BLACK, "G.y %.2f", gyro[1]);
-    //     lcd.drawText(68, 70, &oswald_medium_12, LCD_DARKGREY, LCD_BLACK, "G.z %.2f", gyro[2]);
-    //
-    //     lcd.drawText(85, 180, &oswald_medium_36, LCD_DARKGREY, LCD_BLACK, "%d", counter);
-    //     lcd.update();
-    //     if(++counter > 99){
-    //         counter = 0;
-    //     }
-    //
-    // }
+    while (1)
+    {
+        //IMU runtime test
+        QMI8658_read_xyz(acc, gyro, &tim_count);
+        lcd.drawText(50,  155, &oswald_medium_12, LCD_DARKGREY, LCD_BLACK, "X     Y     Z");
+        lcd.drawText(30,  173, &oswald_light_12,  LCD_DARKGREY, LCD_BLACK, "%.1f", gyro[0]);
+        lcd.drawText(95,  173, &oswald_light_12,  LCD_DARKGREY, LCD_BLACK, "%.1f", gyro[1]);
+        lcd.drawText(170, 173, &oswald_light_12,  LCD_DARKGREY, LCD_BLACK, "%.2f", gyro[2]);
+        lcd.update();
+    }
 
     return 0;
 }

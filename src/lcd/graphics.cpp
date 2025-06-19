@@ -306,10 +306,9 @@ void FrameBuffer::draw_gImage(int x, int y, const unsigned char *data)
     for (uint16_t row = 0; row < h; ++row) {
         for (uint16_t col = 0; col < w; ++col) {
             size_t idx = 2*(row * w + col);
-            // each pixel is high-byte,low-byte RGB565
-            uint16_t raw =
-              (uint16_t(pixels[idx]) << 8) |
-               uint16_t(pixels[idx + 1]);
+
+            // little-endian
+            uint16_t raw = (uint16_t(pixels[idx+1]) << 8)| uint16_t(pixels[idx]);
             setPixel(x + col, y + row, raw);
         }
     }

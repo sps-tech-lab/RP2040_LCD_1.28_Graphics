@@ -47,5 +47,8 @@ extern font oswald_regular_20;
 extern font oswald_regular_24;
 extern font oswald_regular_36;
 
+extern font oswald_bold_12;
+extern font oswald_bold_20;
+
 
 #endif
