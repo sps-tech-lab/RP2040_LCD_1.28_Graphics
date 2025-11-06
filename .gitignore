@@ -16,3 +16,5 @@ third_party/
 CMakePresets.json
 
 *.ttf
+
+cmake-build-debug/
